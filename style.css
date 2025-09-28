@@ -1,167 +1,234 @@
-/* --- 全局樣式與背景 --- */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+:root {
+    --pointer-color: #d63031;
+    --wheel-border: #f1f2f6;
+    --main-bg: #ffffff;
+    --panel-bg: #f7f8fa;
+    --text-color: #2d3436;
+    --primary-color: #0984e3;
+}
+
+* {
+    box-sizing: border-box;
+}
 
 body {
     font-family: 'Noto Sans TC', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: var(--panel-bg);
+    margin: 0;
+    color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
 }
 
-/* --- 主要容器卡片 --- */
-.container {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
     width: 100%;
-    max-width: 500px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 1200px;
+    background: var(--main-bg);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    overflow: hidden;
 }
 
-/* --- 標題樣式 --- */
-h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #3f3d56;
-    margin-bottom: 30px;
+/* 左側控制面板 */
+.controls-panel {
+    flex: 1;
+    min-width: 300px;
+    padding: 30px;
 }
 
-h2 {
-    font-weight: 500;
-    color: #555;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    margin-top: 25px;
-    margin-bottom: 20px;
-}
-
-/* --- 輸入區域 --- */
-.input-section label {
-    display: block;
-    text-align: left;
-    color: #666;
-    margin-bottom: 10px;
-    font-weight: 500;
+.controls-panel h1 {
+    margin-top: 0;
 }
 
 textarea {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #dfe4ea;
     border-radius: 8px;
     font-size: 1rem;
-    box-sizing: border-box;
+    font-family: inherit;
     resize: vertical;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-top: 10px;
 }
 
-textarea:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+.sound-control {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
 }
-
-/* --- 按鈕通用樣式 --- */
-button {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
+.sound-control label {
+    margin-left: 8px;
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    letter-spacing: 0.5px;
-    margin-top: 15px;
-}
-
-#add-btn {
-    background-color: #5d5fef;
-    color: white;
-    width: 100%;
-}
-
-#add-btn:hover {
-    background-color: #4a4de7;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* --- 抽獎池列表 --- */
-#participant-list {
-    list-style: none;
-    padding: 0;
-    margin-top: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-}
-
-#participant-list li {
-    background-color: #f1f3f5;
-    padding: 10px 18px;
-    border-radius: 20px;
-    color: #495057;
-    font-weight: 500;
-}
-
-/* --- 抽獎與重設按鈕 --- */
-.action-section {
-    margin-top: 35px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-#draw-btn {
-    background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 107, 139, 0.3);
-}
-
-#draw-btn:hover {
-    transform: scale(1.03);
-    box-shadow: 0 6px 20px rgba(255, 107, 139, 0.4);
 }
 
 #reset-btn {
-    background-color: transparent;
-    color: #888;
-    border: 1px solid #ddd;
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #636e72;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
-
 #reset-btn:hover {
-    background-color: #f8f9fa;
-    color: #333;
+    background-color: #2d3436;
 }
 
-/* --- 結果顯示區域 --- */
-.result-section {
-    margin-top: 30px;
-    padding: 25px;
-    background-color: #fff;
-    border: 2px dashed #667eea;
-    border-radius: 12px;
-    display: none; /* 預設隱藏 */
+
+/* 右側轉盤 */
+.wheel-panel {
+    flex: 1.5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 450px;
+    padding: 30px;
 }
 
-#winner-name {
-    font-size: 2rem;
+.wheel-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    padding-bottom: 100%; /* 維持 1:1 比例 */
+    height: 0;
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 30px solid var(--pointer-color);
+    z-index: 10;
+    filter: drop-shadow(0 -2px 3px rgba(0,0,0,0.2));
+}
+
+.wheel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 8px solid var(--wheel-border);
+    background: #ccc; /* fallback */
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1), inset 0 0 15px rgba(0,0,0,0.15);
+    transition: transform 7s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+.wheel-segment {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+}
+
+.segment-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: 0 0;
+    padding-left: 15%;
+    font-size: clamp(12px, 3vw, 18px); /* 響應式字體大小 */
+    font-weight: 500;
+    color: rgba(0,0,0,0.7);
+    max-width: 45%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.spin-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20%;
+    height: 20%;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    color: var(--pointer-color);
+    cursor: pointer;
+    z-index: 5;
+    user-select: none;
+    box-shadow: 0 0 0 5px var(--wheel-border), 0 0 15px rgba(0,0,0,0.2);
+}
+
+/* 中獎彈出視窗 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 1000;
+}
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-content {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 15px;
+    text-align: center;
+    position: relative;
+    transform: scale(0.8);
+    transition: transform 0.3s;
+}
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+#winner-text {
+    font-size: clamp(1.5rem, 5vw, 3rem);
     font-weight: bold;
-    color: #3f3d56;
-    margin: 10px 0 0;
-    animation: pop-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    color: var(--primary-color);
+    margin: 0;
+}
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    color: #aaa;
+    cursor: pointer;
 }
 
-/* --- 動畫效果 --- */
-@keyframes pop-in {
-    0% { transform: scale(0.7); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+/* 響應式設計 */
+@media (max-width: 800px) {
+    .main-container {
+        flex-direction: column;
+    }
+    .wheel-panel {
+        order: -1; /* 將轉盤顯示在上方 */
+        min-height: auto;
+        padding-bottom: 15px;
+    }
 }
+
