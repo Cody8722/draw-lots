@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>線上抽籤工具</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>幸運抽籤</h1>
+
+        <div class="input-section">
+            <label for="item-input">請輸入抽獎項目（每行一個）：</label>
+            <textarea id="item-input" rows="5" placeholder="例如：&#10;張三&#10;李四&#10;王五"></textarea>
+            <button id="add-btn">加入列表</button>
+        </div>
+
+        <div class="list-section">
+            <h2>抽獎池</h2>
+            <ul id="participant-list">
+                </ul>
+        </div>
+
+        <div class="action-section">
+            <button id="draw-btn">抽出幸運兒！</button>
+            <button id="reset-btn">全部重設</button>
+        </div>
+
+        <div id="result-section" class="result-section">
+            <h2>中獎的是...</h2>
+            <p id="winner-name"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
