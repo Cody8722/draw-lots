@@ -1,73 +1,140 @@
-// 1. 取得所有需要的 HTML 元素
+// --- DOM 元素 ---
 const itemInput = document.getElementById('item-input');
-const addBtn = document.getElementById('add-btn');
-const participantList = document.getElementById('participant-list');
-const drawBtn = document.getElementById('draw-btn');
-const resetBtn = document.getElementById('reset-btn');
-const resultSection = document.getElementById('result-section');
-const winnerName = document.getElementById('winner-name');
+const wheel = document.querySelector('.wheel');
+const spinButton = document.querySelector('.spin-button');
+const resetButton = document.getElementById('reset-btn');
+const soundCheckbox = document.getElementById('sound-checkbox');
+const tickSound = document.getElementById('tick-sound');
+const winSound = document.getElementById('win-sound');
+const winnerModal = document.getElementById('winner-modal');
+const winnerText = document.getElementById('winner-text');
+const closeBtn = document.querySelector('.close-btn');
 
-// 2. 建立一個陣列來儲存所有抽獎項目
+// --- 應用程式狀態 ---
 let participants = [];
+const colors = ['#8e44ad', '#3498db', '#1abc9c', '#f1c40f', '#e67e22', '#e74c3c', '#2ecc71', '#9b59b6'];
+let isSpinning = false;
+let currentRotation = 0;
+let tickInterval;
 
-// 3. 更新畫面上的參與者列表
-function updateParticipantList() {
-    // 先清空目前的列表
-    participantList.innerHTML = '';
-    
-    // 遍歷 participants 陣列，為每個項目建立一個 <li> 元素並加入畫面
-    participants.forEach(participant => {
-        const li = document.createElement('li');
-        li.textContent = participant;
-        participantList.appendChild(li);
-    });
-}
+// --- 核心函式 ---
 
-// 4. 監聽「加入列表」按鈕的點擊事件
-addBtn.addEventListener('click', () => {
+/**
+ * 根據輸入框的內容更新轉盤
+ */
+function updateWheel() {
     const inputText = itemInput.value.trim();
+    participants = inputText.split('\n').map(item => item.trim()).filter(item => item !== '');
 
-    if (inputText) {
-        // 使用 split('\n') 將輸入的文字按行分割成陣列
-        const newItems = inputText.split('\n')
-                                 .map(item => item.trim()) // 去除每個項目的頭尾空白
-                                 .filter(item => item !== ''); // 過濾掉空行
-
-        // 將新項目加入到 participants 陣列中
-        participants = participants.concat(newItems);
-
-        // 清空輸入框
-        itemInput.value = '';
-
-        // 更新畫面
-        updateParticipantList();
-    }
-});
-
-// 5. 監聽「抽出幸運兒」按鈕的點擊事件
-drawBtn.addEventListener('click', () => {
-    if (participants.length === 0) {
-        alert('抽獎池是空的！請先加入項目。');
+    wheel.innerHTML = ''; // 清空舊的標籤
+    
+    if (participants.length <= 1) {
+        wheel.style.background = '#ccc';
         return;
     }
+    
+    const segmentAngle = 360 / participants.length;
+    const gradientParts = [];
 
-    // 隱藏上一次的結果
-    resultSection.style.display = 'none';
+    participants.forEach((participant, i) => {
+        const color = colors[i % colors.length];
+        const startAngle = i * segmentAngle;
+        const endAngle = (i + 1) * segmentAngle;
 
-    // 產生一個隨機索引值
-    const randomIndex = Math.floor(Math.random() * participants.length);
-    const winner = participants[randomIndex];
+        // 產生 conic-gradient 背景
+        gradientParts.push(`${color} ${startAngle}deg ${endAngle}deg`);
 
-    // 顯示中獎者
-    winnerName.textContent = `🎉 ${winner} 🎉`;
-    resultSection.style.display = 'block';
-});
+        // 產生並定位文字標籤
+        const label = document.createElement('div');
+        label.className = 'segment-label';
+        label.textContent = participant;
+        const labelAngle = startAngle + segmentAngle / 2;
+        label.style.transform = `rotate(${labelAngle}deg)`;
+        wheel.appendChild(label);
+    });
 
-// 6. 監聽「全部重設」按鈕的點擊事件
-resetBtn.addEventListener('click', () => {
-    // 清空陣列和畫面
-    participants = [];
+    wheel.style.background = `conic-gradient(${gradientParts.join(', ')})`;
+}
+
+/**
+ * 開始旋轉轉盤
+ */
+function spinWheel() {
+    if (isSpinning || participants.length < 2) return;
+
+    isSpinning = true;
+    
+    // 播放音效
+    if (soundCheckbox.checked) {
+        tickSound.currentTime = 0;
+        tickSound.play();
+        tickInterval = setInterval(() => {
+            tickSound.currentTime = 0;
+            tickSound.play();
+        }, 200); // 每 200ms 播放一次咔嗒聲
+    }
+    
+    // 計算隨機旋轉角度
+    const randomExtraRotation = Math.random() * 360;
+    const spinAmount = 360 * 5 + randomExtraRotation; // 至少轉 5 圈
+    currentRotation += spinAmount;
+
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
+}
+
+/**
+ * 當轉盤旋轉動畫結束時觸發
+ */
+function onSpinEnd() {
+    // 停止音效
+    clearInterval(tickInterval);
+    if (soundCheckbox.checked) {
+        winSound.play();
+    }
+    
+    // 計算中獎結果
+    const segmentAngle = 360 / participants.length;
+    // 指針在頂部，即 270 度的位置
+    const finalAngle = (currentRotation % 360);
+    const winningAngle = (360 - finalAngle + 270) % 360;
+    const winnerIndex = Math.floor(winningAngle / segmentAngle);
+    const winner = participants[winnerIndex];
+
+    // 顯示中獎視窗
+    winnerText.textContent = winner;
+    winnerModal.classList.add('show');
+    
+    isSpinning = false;
+}
+
+
+// --- 事件監聽 ---
+
+// 只要輸入框內容改變，就更新轉盤
+itemInput.addEventListener('input', updateWheel);
+
+// 點擊 SPIN 按鈕或轉盤本身
+spinButton.addEventListener('click', spinWheel);
+wheel.addEventListener('click', spinWheel);
+
+// 監聽轉盤動畫結束事件
+wheel.addEventListener('transitionend', onSpinEnd);
+
+// 清空重設
+resetButton.addEventListener('click', () => {
     itemInput.value = '';
-    resultSection.style.display = 'none';
-    updateParticipantList();
+    updateWheel();
 });
+
+// 關閉中獎視窗
+closeBtn.addEventListener('click', () => winnerModal.classList.remove('show'));
+winnerModal.addEventListener('click', (e) => {
+    if (e.target === winnerModal) {
+        winnerModal.classList.remove('show');
+    }
+});
+
+
+// --- 初始設定 ---
+updateWheel(); // 頁面載入時先根據預設內容畫一次轉盤
+
