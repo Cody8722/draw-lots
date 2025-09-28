@@ -8,7 +8,3 @@ node_modules
 # 忽略 Dockerfile 本身，因为它不需要被複製到映像檔裡
 Dockerfile
 
-
-http://googleusercontent.com/immersive_entry_chip/2
-
-我已經為您新增了必要的 Docker 設定檔和一份詳細的使用說明。現在您只需要將這些檔案儲存到您的專案中，並按照 `README.md` 的步驟操作，就可以成功將您的網站容器化了。
