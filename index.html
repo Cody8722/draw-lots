@@ -3,37 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>線上抽籤工具</title>
+    <title>線上隨機選擇器轉盤</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
-        <h1>幸運抽籤</h1>
-
-        <div class="input-section">
-            <label for="item-input">請輸入抽獎項目（每行一個）：</label>
-            <textarea id="item-input" rows="5" placeholder="例如：&#10;張三&#10;李四&#10;王五"></textarea>
-            <button id="add-btn">加入列表</button>
+    <div class="main-container">
+        <!-- 左側控制面板 -->
+        <div class="controls-panel">
+            <h1>隨機轉盤</h1>
+            <p>在下方文字區塊輸入選項，每行一個。接著點擊轉盤開始！</p>
+            <textarea id="item-input" rows="10" placeholder="選項一&#10;選項二&#10;選項三"></textarea>
+            <div class="sound-control">
+                <input type="checkbox" id="sound-checkbox" checked>
+                <label for="sound-checkbox">音效</label>
+            </div>
+             <button id="reset-btn">清空重設</p>
         </div>
 
-        <div class="list-section">
-            <h2>抽獎池</h2>
-            <ul id="participant-list">
-                </ul>
-        </div>
-
-        <div class="action-section">
-            <button id="draw-btn">抽出幸運兒！</button>
-            <button id="reset-btn">全部重設</button>
-        </div>
-
-        <div id="result-section" class="result-section">
-            <h2>中獎的是...</h2>
-            <p id="winner-name"></p>
+        <!-- 右側轉盤 -->
+        <div class="wheel-panel">
+            <div class="wheel-wrapper">
+                <div class="wheel-pointer"></div>
+                <div class="wheel"></div>
+                <div class="spin-button">SPIN</div>
+            </div>
         </div>
     </div>
+
+    <!-- 中獎結果彈出視窗 -->
+    <div id="winner-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <p id="winner-text"></p>
+        </div>
+    </div>
+    
+    <!-- 音效檔案 -->
+    <audio id="tick-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+    <audio id="win-sound" src="https://www.soundjay.com/misc/sounds/magic-chime-01.mp3" preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>
 </html>
+
