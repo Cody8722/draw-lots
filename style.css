@@ -1,135 +1,167 @@
+/* --- 全局樣式與背景 --- */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f4f7f9;
+    font-family: 'Noto Sans TC', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    margin: 0;
     padding: 20px;
     box-sizing: border-box;
 }
 
+/* --- 主要容器卡片 --- */
 .container {
-    background-color: #ffffff;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     width: 100%;
     max-width: 500px;
     text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* --- 標題樣式 --- */
 h1 {
-    color: #333;
-    margin-bottom: 25px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #3f3d56;
+    margin-bottom: 30px;
 }
 
 h2 {
+    font-weight: 500;
     color: #555;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
-    margin-top: 20px;
+    margin-top: 25px;
+    margin-bottom: 20px;
 }
 
+/* --- 輸入區域 --- */
 .input-section label {
     display: block;
     text-align: left;
     color: #666;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    font-weight: 500;
 }
 
 textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
+    border-radius: 8px;
+    font-size: 1rem;
     box-sizing: border-box;
     resize: vertical;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
+textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+/* --- 按鈕通用樣式 --- */
 button {
-    padding: 12px 20px;
+    padding: 12px 25px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 1rem;
+    font-weight: 700;
     transition: all 0.3s ease;
-    margin-top: 10px;
+    letter-spacing: 0.5px;
+    margin-top: 15px;
 }
 
 #add-btn {
-    background-color: #007bff;
+    background-color: #5d5fef;
     color: white;
     width: 100%;
 }
 
 #add-btn:hover {
-    background-color: #0056b3;
+    background-color: #4a4de7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* --- 抽獎池列表 --- */
 #participant-list {
     list-style: none;
     padding: 0;
     margin-top: 15px;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
     justify-content: center;
 }
 
 #participant-list li {
-    background-color: #e9ecef;
-    padding: 8px 15px;
+    background-color: #f1f3f5;
+    padding: 10px 18px;
     border-radius: 20px;
     color: #495057;
+    font-weight: 500;
 }
 
+/* --- 抽獎與重設按鈕 --- */
 .action-section {
-    margin-top: 30px;
+    margin-top: 35px;
     display: flex;
-    gap: 15px;
+    flex-direction: column;
+    gap: 10px;
 }
 
 #draw-btn {
-    flex-grow: 1;
-    background-color: #28a745;
+    background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
     color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 139, 0.3);
 }
 
 #draw-btn:hover {
-    background-color: #218838;
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(255, 107, 139, 0.4);
 }
 
 #reset-btn {
-    background-color: #dc3545;
-    color: white;
+    background-color: transparent;
+    color: #888;
+    border: 1px solid #ddd;
 }
 
 #reset-btn:hover {
-    background-color: #c82333;
+    background-color: #f8f9fa;
+    color: #333;
 }
 
+/* --- 結果顯示區域 --- */
 .result-section {
     margin-top: 30px;
-    padding: 20px;
-    background-color: #fff3cd;
-    border: 1px solid #ffeeba;
-    border-radius: 8px;
+    padding: 25px;
+    background-color: #fff;
+    border: 2px dashed #667eea;
+    border-radius: 12px;
     display: none; /* 預設隱藏 */
 }
 
 #winner-name {
-    font-size: 28px;
+    font-size: 2rem;
     font-weight: bold;
-    color: #856404;
+    color: #3f3d56;
     margin: 10px 0 0;
-    animation: pop-in 0.5s ease;
+    animation: pop-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* --- 動畫效果 --- */
 @keyframes pop-in {
-    0% { transform: scale(0.5); opacity: 0; }
+    0% { transform: scale(0.7); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
