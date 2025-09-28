@@ -1,0 +1,12 @@
+{
+  "name": "lottery-website",
+  "version": "1.0.0",
+  "description": "A simple lottery drawing website.",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve -s . -l $PORT"
+  },
+  "devDependencies": {
+    "serve": "^14.0.0"
+  }
+}
